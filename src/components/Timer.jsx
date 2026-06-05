@@ -23,16 +23,16 @@ function Timer({ timeLimit, onTimeUp }) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const getTimerColor = () => {
+  const getTimerClass = () => {
     const percentage = (timeLeft / timeLimit) * 100;
-    if (percentage > 50) return '#4caf50';
-    if (percentage > 20) return '#ff9800';
-    return '#f44336';
+    if (percentage <= 20) return 'timer danger';
+    if (percentage <= 50) return 'timer warning';
+    return 'timer';
   };
 
   return (
     <div className="timer-container">
-      <div className="timer" style={{ color: getTimerColor() }}>
+      <div className={getTimerClass()}>
         ⏱️ {formatTime(timeLeft)}
       </div>
     </div>

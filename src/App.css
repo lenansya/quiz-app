@@ -1,23 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 .App {
   min-height: 100vh;
+  background: #0a0a0f;
 }
 
 .quiz-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0a0a0f;
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-container::before {
+  content: '';
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 50%;
+  filter: blur(100px);
+  top: -100px;
+  right: -80px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quiz-container::after {
+  content: '';
+  position: fixed;
+  width: 350px;
+  height: 350px;
+  background: rgba(20, 184, 166, 0.15);
+  border-radius: 50%;
+  filter: blur(100px);
+  bottom: -80px;
+  left: -60px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .loading-container {
@@ -26,27 +53,28 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0a0a0f;
 }
 
 .loading-spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  width: 52px;
+  height: 52px;
+  border: 3px solid rgba(255, 255, 255, 0.08);
+  border-top-color: #7c3aed;
+  border-right-color: #14b8a6;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.9s linear infinite;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .loading-container p {
-  color: white;
+  font-family: 'Sora', sans-serif;
+  color: rgba(255, 255, 255, 0.4);
   margin-top: 20px;
-  font-size: 1.2em;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 300;
+  letter-spacing: 0.3px;
 }

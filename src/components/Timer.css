@@ -1,19 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap');
+
 .timer-container {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .timer {
-  font-size: 2em;
-  font-weight: bold;
-  padding: 15px 30px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Sora', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 12px 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  color: #f0eeff;
   display: inline-block;
-  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-.timer:hover {
-  transform: scale(1.05);
+.timer.warning {
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+}
+
+.timer.danger {
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #f87171;
+  animation: pulse 0.8s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }

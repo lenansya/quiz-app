@@ -8,7 +8,7 @@ import Result from './components/Result';
 import './App.css';
 
 function App() {
-  const [stage, setStage] = useState('login'); 
+  const [stage, setStage] = useState('login');
   const [userName, setUserName] = useState('');
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -16,6 +16,8 @@ function App() {
   const [quizConfig, setQuizConfig] = useState(null);
   const [results, setResults] = useState({ correct: 0, incorrect: 0, unanswered: 0 });
   const [loading, setLoading] = useState(false);
+  const [startTime, setStartTime] = useState(null); // tambahan
+  const [timeTaken, setTimeTaken] = useState(0);    // tambahan
 
   useEffect(() => {
     const saved = localStorage.getItem('quizState');
@@ -38,12 +40,7 @@ function App() {
   useEffect(() => {
     if (stage === 'quiz') {
       localStorage.setItem('quizState', JSON.stringify({
-        stage,
-        userName,
-        questions,
-        currentQuestion,
-        userAnswers,
-        quizConfig
+        stage, userName, questions, currentQuestion, userAnswers, quizConfig
       }));
     }
   }, [stage, userName, questions, currentQuestion, userAnswers, quizConfig]);
@@ -57,13 +54,12 @@ function App() {
     setLoading(true);
     try {
       let url = `https://opentdb.com/api.php?amount=${config.amount}`;
-      
       if (config.category) url += `&category=${config.category}`;
       if (config.difficulty) url += `&difficulty=${config.difficulty}`;
       if (config.type) url += `&type=${config.type}`;
-      
+
       const response = await axios.get(url);
-      
+
       if (response.data.results.length === 0) {
         alert('Tidak ada soal yang tersedia dengan pengaturan ini. Coba ubah pengaturan!');
         setLoading(false);
@@ -74,6 +70,7 @@ function App() {
       setQuizConfig(config);
       setUserAnswers(new Array(response.data.results.length).fill(null));
       setCurrentQuestion(0);
+      setStartTime(Date.now()); // catat waktu mulai
       setStage('quiz');
       setLoading(false);
     } catch (error) {
@@ -102,18 +99,14 @@ function App() {
   };
 
   const finishQuiz = (answers) => {
-    let correct = 0;
-    let incorrect = 0;
-    let unanswered = 0;
+    const elapsed = Math.floor((Date.now() - startTime) / 1000); // hitung detik
+    setTimeTaken(elapsed);
 
+    let correct = 0, incorrect = 0, unanswered = 0;
     questions.forEach((q, index) => {
-      if (answers[index] === null) {
-        unanswered++;
-      } else if (answers[index] === q.correct_answer) {
-        correct++;
-      } else {
-        incorrect++;
-      }
+      if (answers[index] === null) unanswered++;
+      else if (answers[index] === q.correct_answer) correct++;
+      else incorrect++;
     });
 
     setResults({ correct, incorrect, unanswered });
@@ -128,6 +121,8 @@ function App() {
     setUserAnswers([]);
     setResults({ correct: 0, incorrect: 0, unanswered: 0 });
     setQuizConfig(null);
+    setTimeTaken(0);
+    setStartTime(null);
   };
 
   if (loading) {
@@ -144,11 +139,11 @@ function App() {
   return (
     <div className="App">
       {stage === 'login' && <Login onLogin={handleLogin} />}
-      
+
       {stage === 'setup' && (
         <QuizSetup userName={userName} onStartQuiz={handleStartQuiz} />
       )}
-      
+
       {stage === 'quiz' && (
         <div className="quiz-container">
           <Timer timeLimit={quizConfig.timeLimit} onTimeUp={handleTimeUp} />
@@ -160,12 +155,13 @@ function App() {
           />
         </div>
       )}
-      
+
       {stage === 'result' && (
         <Result
           results={results}
           totalQuestions={questions.length}
           userName={userName}
+          timeTaken={timeTaken}  // prop baru
           onRestart={handleRestart}
         />
       )}

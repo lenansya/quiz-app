@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import './Login.css';
 
 function Login({ onLogin }) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name.trim()) {
+    if (name.trim()) { 
       onLogin(name);
     } else {
-      alert('Silakan masukkan nama Anda!');
+      alert('Silakan masukkan nama Anda!'); 
     }
   };
 
